@@ -1,0 +1,75 @@
+{% extends "../template/layout.twig" %}
+
+{% block title %}
+    Home here
+{% endblock %}
+
+
+
+{% block content %}
+
+    <div class="starter-template text-center py-5 px-3">
+        <h1>{{ title }}</h1> 
+        <div id="content-product">
+        {% for item in data %}
+            {{item.name}}
+            <hr>
+        {% endfor %}
+        </div>       
+    </div>
+    
+{% endblock %}
+
+
+
+{% block style %}
+    <style>
+        /*.image{
+            width: 100%;
+        }*/
+    </style>
+{% endblock %}
+
+
+{% block script %}
+    <script>
+        const $product = document.querySelector('#content-product')
+        document.querySelector('#search').addEventListener('click', (e) => {
+
+            e.preventDefault()
+
+            let name = document.querySelector('#search-name').value
+
+            fetch("/", {
+            "method": "POST",
+            "headers": {
+                "Content-Type": "application/json"
+            },
+                "body": JSON.stringify({name: name})
+            })
+            .then(response => response.json())
+            .then(result => {
+                if(result.data.length > 0){     
+                    let search_container = document.createElement("article")      
+
+                    $product.innerHTML = ''
+                    result.data.forEach(el => {           
+                        console.log(el.name)             
+                        let search_item = document.createElement("p")
+                        let hr = document.createElement("hr")
+
+                        search_item.innerText = el.name                        
+                        
+                        search_container.appendChild(search_item)                        
+                        search_container.appendChild(hr)
+                    })                                        
+                    $product.appendChild(search_container)
+                }                
+            })
+            .catch(err => {
+                console.error(err);
+            })
+        })
+        
+    </script>
+{% endblock %}
