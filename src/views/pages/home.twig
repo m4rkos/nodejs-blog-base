@@ -12,6 +12,7 @@
         <h1>{{ title }}</h1> 
         <div id="content-product">
         {% for item in data %}
+            <img src="{{ image[loop.index] }}" alt="">
             {{item.name}}
             <hr>
         {% endfor %}
@@ -52,16 +53,22 @@
                 if(result.data.length > 0){     
                     let search_container = document.createElement("article")      
 
+                    let inx = 0
                     $product.innerHTML = ''
                     result.data.forEach(el => {           
                         console.log(el.name)             
                         let search_item = document.createElement("p")
                         let hr = document.createElement("hr")
+                        let image = document.createElement("img")
 
-                        search_item.innerText = el.name                        
+                        search_item.innerText = el.name                                      
+                        image.src = result.image[inx]
                         
+                        search_container.appendChild(image)                        
                         search_container.appendChild(search_item)                        
                         search_container.appendChild(hr)
+                        
+                        inx ++
                     })                                        
                     $product.appendChild(search_container)
                 }                
