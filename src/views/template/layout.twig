@@ -45,8 +45,10 @@
                         </li>
                     </ul>
                     <form class="d-flex">
+                        {% if search %}
                         <input class="form-control me-2" id="search-name" type="search" placeholder="Search" aria-label="Search">
                         <button class="btn btn-outline-success me-2" id="search">Search</button>
+                        {% endif %}
                         {% if logged %}
                         <a class="btn btn-outline-success" href="/logoff">SAIR</a>
                         {% else %}
@@ -66,5 +68,6 @@
         <script src="script/bootstrap.min.js"></script>        
 
         {% block script %}{% endblock %}
+        {% block script_bottom %}{% endblock %}
     </body>
 </html>

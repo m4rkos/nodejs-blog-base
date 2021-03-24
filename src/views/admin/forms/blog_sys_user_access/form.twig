@@ -1,0 +1,124 @@
+<form class='row g-3'>
+
+                <div class='col-md-6'>
+                    <label for='id_user' class='form-label'>id_user</label>
+                    <div id="user"></div>
+                </div>
+
+                <div class='col-md-6'>
+                    <label for='id_permition' class='form-label'>id_permition</label>
+                    <div id="permition"></div>
+                </div>
+
+        <div class='row g-3 pb-2 border-bottom'></div>
+
+        <div class='row' role='group'>
+            <div class='col-md-12 g-3 pb-2'>
+                <a id="cancel" class='btn btn-danger'>Cancelar</a>   
+                <a id="save" class='btn btn-primary'>Salvar</a>
+            </div>
+        </div>
+        </form>
+
+
+    <script>
+        
+            fetch("/admin-user-json", {
+            "method": "GET",
+                "headers": {
+                    "Content-Type": "application/json"
+                }                
+            })
+            .then(response => response.json())
+            .then(result => {
+                if(result.data.length > 0){                         
+                    const $user = document.querySelector('#user')
+                    console.log(result.data)
+
+                    var selectList = document.createElement("select")
+                    selectList.id = "id_user"
+                    selectList.className = "form-select"
+                    $user.appendChild(selectList)
+
+                    //Create and append the options
+                    for (var i = 0; i < result.data.length; i++) {
+                        var option = document.createElement("option")
+                        option.value = result.data[i].id_user
+                        option.text = result.data[i].fullname
+                        selectList.appendChild(option)
+                    }                    
+                }                
+            })
+            .catch(err => {
+                console.error(err);
+            })
+
+            fetch("/admin-permition-json", {
+            "method": "GET",
+                "headers": {
+                    "Content-Type": "application/json"
+                }                
+            })
+            .then(response => response.json())
+            .then(result => {
+                if(result.data.length > 0){                                             
+                    const $permition = document.querySelector('#permition')
+                    console.log(result.data)
+
+                    var selectList = document.createElement("select")
+                    selectList.id = "id_permition"
+                    selectList.className = "form-select"
+                    $permition.appendChild(selectList)
+
+                    //Create and append the options
+                    for (var i = 0; i < result.data.length; i++) {
+                        var option = document.createElement("option")
+                        option.value = result.data[i].id_permition
+                        option.text = result.data[i].permition_type
+                        selectList.appendChild(option)
+                    }
+                }                
+            })
+            .catch(err => {
+                console.error(err);
+            })
+
+            /***/
+
+
+            document.querySelector('#cancel').addEventListener('click', (e) => {
+                e.preventDefault()
+                location.href = "/admin"                
+            })
+                
+            document.querySelector('#save').addEventListener('click', (e) => {
+                e.preventDefault()
+
+                let inputs = {
+                    id_permition:  document.querySelector('#id_permition').value,        
+                    id_user:  document.querySelector('#id_user').value,
+                }
+
+                fetch("/admin-user-access", {
+                "method": "POST",
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                    "body": JSON.stringify(inputs)
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.status == 200){                             
+                        alert('cadastro ok')
+                        console.log(result.data)
+                    } else {
+                        alert(`${result.data}`)
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                })
+            })
+            
+        
+    </script>

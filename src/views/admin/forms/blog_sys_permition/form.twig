@@ -1,0 +1,66 @@
+<form class='row g-3'>
+    <div class='col-md-4'>
+        <label for='permition_type' class='form-label'>permition_type</label>
+        <input type='text' class='form-control' id='permition_type' placeholder='permition_type' required>
+    </div>
+
+    <div class='col-md-12'>
+        <label for='permition_decription' class='col-auto col-form-label'>permition_decription</label>
+        <textarea id='permition_decription' cols='30' rows='10' style='width: 100%'></textarea>
+    </div>
+
+    <div class='row g-3 pb-2 border-bottom'></div>
+
+    <div class='row' role='group'>
+        <div class='col-md-12 g-3 pb-2'>
+            <a id="cancel" class='btn btn-danger'>Cancelar</a>   
+            <a id="save" class='btn btn-primary'>Salvar</a>
+        </div>
+    </div>
+    </form>
+
+<script>   
+
+    const clean = () => {
+        document.querySelector('#permition_type').value = ''
+        document.querySelector('#permition_decription').value = ''
+    }
+
+    document.querySelector('#cancel').addEventListener('click', (e) => {
+        e.preventDefault()
+        
+        clean()
+        location.href = "/admin"
+    })
+    
+    document.querySelector('#save').addEventListener('click', (e) => {
+        e.preventDefault()
+
+        let inputs = {
+            permition_type: document.querySelector('#permition_type').value,
+            permition_decription: document.querySelector('#permition_decription').value
+        }
+
+        fetch("/admin-permition", {
+        "method": "POST",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+            "body": JSON.stringify(inputs)
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.status == 200){     
+                clean()
+                alert('cadastro ok')
+                console.log(result.data)
+            } else {
+                alert(`${result.data}`)
+            }
+        })
+        .catch(err => {
+            console.error(err);
+        })
+    })
+
+</script>

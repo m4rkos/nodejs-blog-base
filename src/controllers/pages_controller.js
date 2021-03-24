@@ -3,22 +3,23 @@ module.exports.home = (app, req, res) => {
     let query = ''
 
     if( req.params.id ){        
-        query = `where id_product_db = ${req.params.id}`
+        query = `where id_user = ${req.params.id}`
     }
     if( req.body.name ){
-        query = `where name like '%${req.body.name}%'`
+        query = `where fullname like '%${req.body.name}%'`
     }    
 
     try {
         const db = require('../../config/database_mysql')   
         let conn = db()
 
-        let sql = `SELECT * FROM accounts ${query}`
+        let sql = `SELECT * FROM blog_sys_user ${query}`
         
         conn().query(sql, (error, result, fields) => {                                    
             res.render('pages/home', {
                 title: 'Home page',
                 data: result,
+                search: true,
                 image: getImage(result.length),
                 id: req.params.id ? parseInt(req.params.id) : 0,        
             })    
@@ -29,7 +30,9 @@ module.exports.home = (app, req, res) => {
     } catch (error) {
         res.render('pages/home', {
             title: 'Home page',
-            data: error,
+            data: null,
+            error: error,
+            search: true,
             id: req.params.id ? parseInt(req.params.id) : 0,        
         })
     }         
@@ -40,17 +43,17 @@ module.exports.serachHome = (app, req, res) => {
     let query = ''
 
     if( req.params.id ){        
-        query = `where id_product_db = ${req.params.id}`
+        query = `where id_user = ${req.params.id}`
     }
     if( req.body.name ){
-        query = `where name like '%${req.body.name}%'`
+        query = `where fullname like '%${req.body.name}%'`
     }    
 
     try {
         const db = require('../../config/database_mysql')   
         let conn = db()
 
-        let sql = `SELECT * FROM products ${query}`
+        let sql = `SELECT * FROM blog_sys_user ${query}`
         
         conn().query(sql, (error, result, fields) => {      
             let img = getImage(result.length)

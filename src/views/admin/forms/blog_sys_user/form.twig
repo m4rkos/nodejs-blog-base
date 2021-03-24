@@ -1,0 +1,107 @@
+<form class='row g-3'>
+
+                    <div class='col-md-4'>
+                        <label for='fullname' class='form-label'>fullname</label>
+                        <input type='text' class='form-control' id='fullname' placeholder='fullname' required>
+                    </div>
+
+                <div class='col-md-12'>
+                <label for='resume' class='col-auto col-form-label'>resume</label>
+                    <textarea id='resume' cols='30' rows='10' style='width: 100%'></textarea>
+                </div>
+                    
+                    <div class='col-md-4'>
+                    <label for='email' class='form-label'>email</label>
+                    <div class='input-group'>
+                        <span class='input-group-text' id='l_email'>@</span>
+                        <input type='email' class='form-control' id='email' aria-describedby='l_email' placeholder='email' required>
+                    </div>
+                    </div>
+
+                    <div class='col-md-4'>
+                        <label for='phone' class='form-label'>phone</label>
+                        <input type='text' class='form-control' id='phone' placeholder='phone' required>
+                    </div>
+
+                    <div class='col-md-4'>
+                        <label for='image' class='form-label'>image</label>
+                        <input type='text' class='form-control' id='image' placeholder='image' required>
+                    </div>
+
+                    <div class='col-md-4'>
+                        <label for='password' class='form-label'>password</label>
+                        <input type='text' class='form-control' id='password' placeholder='password' required>
+                    </div>
+
+                    <div class='col-md-4'>
+                        <label for='user_status' class='form-label'>user_status</label>                        
+                        <select class="form-select" id="user_status" required>                            
+                            <option value="1">Ativo</option>
+                            <option value="0">Inativo</option>
+                        </select>
+                    </div>
+
+        <div class='row g-3 pb-2 border-bottom'></div>
+
+        <div class='row' role='group'>
+            <div class='col-md-12 g-3 pb-2'>
+                <a id="cancel" class='btn btn-danger'>Cancelar</a>   
+                <a id="save" class='btn btn-primary'>Salvar</a>
+            </div>
+        </div>
+        </form>
+
+<script>   
+
+const clean = () => {
+    document.querySelector('#fullname').value = ''    
+    document.querySelector('#resume').value = ''
+    document.querySelector('#email').value = ''
+    document.querySelector('#phone').value = ''
+    document.querySelector('#image').value = ''
+    document.querySelector('#password').value = ''
+}
+
+document.querySelector('#cancel').addEventListener('click', (e) => {
+    e.preventDefault()
+
+    clean()
+    location.href = "/admin"
+    
+})
+     
+document.querySelector('#save').addEventListener('click', (e) => {
+    e.preventDefault()
+
+    let inputs = {
+        fullname:  document.querySelector('#fullname').value,        
+        resume:  document.querySelector('#resume').value,
+        email:  document.querySelector('#email').value,
+        phone:  document.querySelector('#phone').value,
+        image:  document.querySelector('#image').value,
+        password:  document.querySelector('#password').value,  
+    }
+
+    fetch("/admin-user", {
+    "method": "POST",
+    "headers": {
+        "Content-Type": "application/json"
+    },
+        "body": JSON.stringify(inputs)
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.status == 200){     
+            clean()
+            alert('cadastro ok')
+            console.log(result.data)
+        } else {
+            alert(`${result.data}`)
+        }
+    })
+    .catch(err => {
+        console.error(err);
+    })
+})
+
+</script>

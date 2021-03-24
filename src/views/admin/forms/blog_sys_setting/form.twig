@@ -1,0 +1,141 @@
+<form class='row g-3'>
+                    
+                    <div class='col-md-4'>
+                    <label for='email' class='form-label'>email</label>
+                    <div class='input-group'>
+                        <span class='input-group-text' id='l_email'>@</span>
+                        <input type='email' class='form-control' id='email' aria-describedby='l_email' placeholder='email' required>
+                    </div>
+                    </div>
+
+                    <div class='col-md-4'>
+                        <label for='email_smtp' class='form-label'>email_smtp</label>
+                        <input type='text' class='form-control' id='email_smtp' placeholder='email_smtp' required>
+                    </div>
+
+                    <div class='col-md-4'>
+                        <label for='email_port' class='form-label'>email_port</label>
+                        <input type='text' class='form-control' id='email_port' placeholder='email_port' required>
+                    </div>
+
+                    <div class='col-md-4'>
+                        <label for='email_password' class='form-label'>email_password</label>
+                        <input type='text' class='form-control' id='email_password' placeholder='email_password' required>
+                    </div>
+
+                <div class='col-md-12'>
+                <label for='google_tag' class='col-auto col-form-label'>google_tag</label>
+                    <textarea id='google_tag' cols='30' rows='10' style='width: 100%'></textarea>
+                </div>
+
+                <div class='col-md-12'>
+                <label for='faceboo_pixel' class='col-auto col-form-label'>faceboo_pixel</label>
+                    <textarea id='faceboo_pixel' cols='30' rows='10' style='width: 100%'></textarea>
+                </div>
+
+                <div class='col-md-12'>
+                <label for='pagseguro_key' class='col-auto col-form-label'>pagseguro_key</label>
+                    <textarea id='pagseguro_key' cols='30' rows='10' style='width: 100%'></textarea>
+                </div>
+
+                    <div class='col-md-4'>
+                        <label for='mailchimp_token' class='form-label'>mailchimp_token</label>
+                        <input type='text' class='form-control' id='mailchimp_token' placeholder='mailchimp_token' required>
+                    </div>
+
+                    <div class='col-md-4'>
+                        <label for='rd_token_public' class='form-label'>rd_token_public</label>
+                        <input type='text' class='form-control' id='rd_token_public' placeholder='rd_token_public' required>
+                    </div>
+
+                    <div class='col-md-4'>
+                        <label for='rd_token_private' class='form-label'>rd_token_private</label>
+                        <input type='text' class='form-control' id='rd_token_private' placeholder='rd_token_private' required>
+                    </div>
+
+                <div class='col-md-12'>
+                <label for='site_description' class='col-auto col-form-label'>site_description</label>
+                    <textarea id='site_description' cols='30' rows='10' style='width: 100%'></textarea>
+                </div>
+
+                    <div class='col-md-4'>
+                        <label for='thumbnail_url' class='form-label'>thumbnail_url</label>
+                        <input type='text' class='form-control' id='thumbnail_url' placeholder='thumbnail_url' required>
+                    </div>
+
+        <div class='row g-3 pb-2 border-bottom'></div>
+
+        <div class='row' role='group'>
+            <div class='col-md-12 g-3 pb-2'>
+                <a id="cancel" class='btn btn-danger'>Cancelar</a>   
+                <a id="save" class='btn btn-primary'>Salvar</a>
+            </div>
+        </div>
+        </form>
+
+<script>   
+
+const clean = () => {
+    document.querySelector('#email').value = ''
+    document.querySelector('#email_smtp').value = ''
+    document.querySelector('#email_port').value = ''
+    document.querySelector('#email_password').value = ''
+    document.querySelector('#google_tag').value = ''
+    document.querySelector('#faceboo_pixel').value = ''
+    document.querySelector('#pagseguro_key').value = ''
+    document.querySelector('#mailchimp_token').value = ''
+    document.querySelector('#rd_token_public').value = ''
+    document.querySelector('#rd_token_private').value = ''
+    document.querySelector('#site_description').value = ''
+    document.querySelector('#thumbnail_url').value = ''
+}
+
+document.querySelector('#cancel').addEventListener('click', (e) => {
+    e.preventDefault()
+
+    clean()
+    location.href = "/admin"
+    
+})
+     
+document.querySelector('#save').addEventListener('click', (e) => {
+    e.preventDefault()
+
+    let inputs = {
+        email: document.querySelector('#email').value,
+        email_smtp: document.querySelector('#email_smtp').value,
+        email_port: document.querySelector('#email_port').value,
+        email_password: document.querySelector('#email_password').value,
+        google_tag: document.querySelector('#google_tag').value,
+        faceboo_pixel: document.querySelector('#faceboo_pixel').value,
+        pagseguro_key: document.querySelector('#pagseguro_key').value,
+        mailchimp_token: document.querySelector('#mailchimp_token').value,
+        rd_token_public: document.querySelector('#rd_token_public').value,
+        rd_token_private: document.querySelector('#rd_token_private').value,
+        site_description: document.querySelector('#site_description').value,
+        thumbnail_url: document.querySelector('#thumbnail_url').value,
+    }
+
+    fetch("/admin-setting", {
+    "method": "POST",
+    "headers": {
+        "Content-Type": "application/json"
+    },
+        "body": JSON.stringify(inputs)
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.status == 200){     
+            clean()
+            alert('cadastro ok')
+            console.log(result.data)
+        } else {
+            alert(`${result.data}`)
+        }
+    })
+    .catch(err => {
+        console.error(err);
+    })
+})
+
+</script>

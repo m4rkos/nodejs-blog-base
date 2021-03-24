@@ -11,11 +11,13 @@
     <div class="starter-template text-center py-5 px-3">
         <h1>{{ title }}</h1> 
         <div id="content-product">
-        {% for item in data %}
+        {% if data %}
+            {% for item in data %}
             <img src="{{ image[loop.index] }}" alt="">
-            {{item.name}}
+            {{item.fullname}}
             <hr>
-        {% endfor %}
+            {% endfor %}
+        {% endif %}
         </div>       
     </div>
     
@@ -56,12 +58,12 @@
                     let inx = 0
                     $product.innerHTML = ''
                     result.data.forEach(el => {           
-                        console.log(el.name)             
+                        console.log(el.fullname)             
                         let search_item = document.createElement("p")
                         let hr = document.createElement("hr")
                         let image = document.createElement("img")
 
-                        search_item.innerText = el.name                                      
+                        search_item.innerText = el.fullname                                      
                         image.src = result.image[inx]
                         
                         search_container.appendChild(image)                        
